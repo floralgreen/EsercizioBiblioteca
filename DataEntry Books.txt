@@ -1,0 +1,15 @@
+DataEntry Books
+
+{
+    "id": null,
+    "title": "Music theory dictionary",
+    "author": "William F. Lee",
+    "releaseYear": 1966
+}
+
+{
+    "id": null,
+    "title": "Clean Code",
+    "author": "Robert C. Martin",
+    "releaseYear": 2011
+}
