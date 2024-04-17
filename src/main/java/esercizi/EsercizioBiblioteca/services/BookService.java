@@ -1,13 +1,11 @@
 package esercizi.EsercizioBiblioteca.services;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import esercizi.EsercizioBiblioteca.entities.Book;
 import esercizi.EsercizioBiblioteca.entities.DTO.BaseResponse;
 import esercizi.EsercizioBiblioteca.entities.enums.RecordStatusEnum;
 import esercizi.EsercizioBiblioteca.repositories.BookRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,12 +17,23 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
+    /**
+     *
+     * @param book given a book to create
+     * @return a BaseResponse containing the status of the response, the Book just created on the DB and a confirmation message
+     */
     public BaseResponse addBook(Book book) {
         Book bookCreated = bookRepository.save(book);
         BaseResponse response = new BaseResponse(HttpServletResponse.SC_OK, "OK", "Book Created!", bookCreated);
         return response;
     }
 
+    /**
+     *
+     * @param id given a bookId
+     * @return a BaseResponse with status 200 if the Book is found
+     *          or a BaseResponse with status NOT_FOUND if the Book doesn't exists in the DB
+     */
     public BaseResponse getBookById(Integer id) {
         BaseResponse response = new BaseResponse(HttpServletResponse.SC_NOT_FOUND, "NOT FOUND","Book doesn't exists!", Optional.empty());
         Optional<Book> book = bookRepository.findActiveBookById(id);
@@ -38,10 +47,21 @@ public class BookService {
         return response;
     }
 
+    /**
+     *
+     * @return a List with all the Books in the DB
+     */
     public List<Book> getAllBooks() {
         return bookRepository.findAllActiveBooks();
     }
 
+    /**
+     *
+     * @param id given a bookId that you want to update
+     * @param book with updated infos
+     * @return a BaseResponse with STATUS OK, the entity updated
+     *          a BaseResponse with NOT FOUND
+     */
     public BaseResponse updateBook(Integer id, Book book) {
         BaseResponse response = new BaseResponse(HttpServletResponse.SC_NOT_FOUND, "NOT FOUND","Book doesn't exists!", Optional.empty());
         Optional<Book> bookOptional = bookRepository.findActiveBookById(id);
@@ -60,6 +80,13 @@ public class BookService {
         return response;
     }
 
+    /**
+     *
+     * @param id bookId
+     * @return BaseResponse with STATUS OK and the Book lended
+     *          BaseResponse with STATUS NOT FOUND if the resource does not exist
+     *          BaseResponse with STATUS BAD_REQUEST if the Book is already lended
+     */
     public BaseResponse lendBook(Integer id) {
         BaseResponse response = new BaseResponse(HttpServletResponse.SC_NOT_FOUND, "NOT FOUND","Book doesn't exists!", Optional.empty());
         Optional<Book> bookOptional = bookRepository.findActiveBookById(id);
@@ -86,6 +113,13 @@ public class BookService {
         return response;
     }
 
+    /**
+     *
+     * @param id given a bookId
+     * @return BaseResponse with STATUS OK and the Book returned
+     *          BaseResponse with STATUS NOT FOUND if the resource does not exist
+     *          BaseResponse with STATUS BAD_REQUEST if the Book is already available
+     */
     public BaseResponse returnBook(Integer id) {
         BaseResponse response = new BaseResponse(HttpServletResponse.SC_NOT_FOUND, "NOT FOUND","Book doesn't exists!", Optional.empty());
         Optional<Book> bookOptional = bookRepository.findActiveBookById(id);
@@ -112,6 +146,11 @@ public class BookService {
         return response;
     }
 
+    /**
+     *
+     * @param id given a bookId
+     * @return the deleted Book
+     */
     public BaseResponse deleteBookById(Integer id) {
         BaseResponse response = new BaseResponse(HttpServletResponse.SC_NOT_FOUND, "NOT FOUND","Book doesn't exists!", Optional.empty());
         Optional<Book> book = bookRepository.findActiveBookById(id);
