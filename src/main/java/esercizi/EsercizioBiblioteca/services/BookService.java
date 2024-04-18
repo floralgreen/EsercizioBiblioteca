@@ -170,6 +170,10 @@ public class BookService {
         return response;
     }
 
+    /**
+     *
+     * @return true if the actual list of books lend is less than the MAX_BOOKS_LEND(50) field
+     */
     private boolean checkMaxBooksAvailability(){
         Integer lendedBooksActual = bookRepository.findAllActiveBooksOnAvailability(false).size();
         return lendedBooksActual < MAX_BOOKS_LEND;
