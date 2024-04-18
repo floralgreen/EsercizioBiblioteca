@@ -16,6 +16,7 @@ public class BookService {
 
     @Autowired
     private BookRepository bookRepository;
+    private final Integer MAX_BOOKS_LEND = 50;
 
     /**
      *
@@ -83,17 +84,19 @@ public class BookService {
     /**
      *
      * @param id bookId
-     * @return BaseResponse with STATUS OK and the Book lended
+     * @return BaseResponse with STATUS OK and the Book lend
      *          BaseResponse with STATUS NOT FOUND if the resource does not exist
-     *          BaseResponse with STATUS BAD_REQUEST if the Book is already lended
+     *          BaseResponse with STATUS BAD_REQUEST if the Book is already lend
      */
     public BaseResponse lendBook(Integer id) {
         BaseResponse response = new BaseResponse(HttpServletResponse.SC_NOT_FOUND, "NOT FOUND","Book doesn't exists!", Optional.empty());
         Optional<Book> bookOptional = bookRepository.findActiveBookById(id);
 
+
+
         if (bookOptional.isPresent()) {
 
-            if (bookOptional.get().isAvailable()){
+            if (bookOptional.get().isAvailable() && checkMaxBooksAvailability()){
                 bookOptional.get().setAvailable(false);
                 bookRepository.save(bookOptional.get());
 
@@ -165,6 +168,11 @@ public class BookService {
             response.setData(book.get());
         }
         return response;
+    }
+
+    private boolean checkMaxBooksAvailability(){
+        Integer lendedBooksActual = bookRepository.findAllActiveBooksOnAvailability(false).size();
+        return lendedBooksActual < MAX_BOOKS_LEND;
     }
 
 

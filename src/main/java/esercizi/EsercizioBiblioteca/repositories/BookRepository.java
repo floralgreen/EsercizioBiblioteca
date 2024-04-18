@@ -18,4 +18,7 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     @Query(value = "SELECT * FROM books AS b WHERE b.record_status = 'A'", nativeQuery = true)
     List<Book> findAllActiveBooks();
 
+    @Query(value = "SELECT * FROM books AS b WHERE b.record_status = 'A' AND b.available = :availability", nativeQuery = true)
+    List<Book> findAllActiveBooksOnAvailability(boolean availability);
+
 }
