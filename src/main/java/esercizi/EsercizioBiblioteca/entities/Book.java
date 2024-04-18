@@ -20,13 +20,13 @@ public class Book {
     private boolean available = true;
 
     @Enumerated(EnumType.STRING)
-    @JsonIgnore
     @Column(nullable = false, length = 1, name = "record_status")
     private RecordStatusEnum recordStatusEnum = RecordStatusEnum.A;
 
     public Book() {}
 
-    public Book(String title, String author, Integer releaseYear) {
+    public Book(Integer id,String title, String author, Integer releaseYear) {
+        this.id = id;
         this.title = title;
         this.author = author;
         this.releaseYear = releaseYear;
