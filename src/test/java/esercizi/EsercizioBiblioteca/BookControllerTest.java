@@ -156,6 +156,42 @@ public class BookControllerTest {
         bookRepository.deleteAll();
     }
 
+    @Test
+    void lendBook() throws Exception{
+        Book bookSaved = bookRepository.save(mockBook());
+        boolean lend = false;
+
+
+        this.mockMvc.perform(post("/books/{id}/lend", bookSaved.getId()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.id", is(bookSaved.getId())))
+                .andExpect(jsonPath("$.data.available", is(lend)))
+                .andReturn();
+
+        //clear the DB
+        bookRepository.deleteAll();
+    }
+
+    @Test
+    void returnBook() throws Exception {
+        Book bookSaved = mockBook();
+        bookSaved.setAvailable(false);
+        Book lendBook = bookRepository.save(bookSaved);
+
+        boolean returned = true;
+
+        this.mockMvc.perform(post("/books/{id}/return", bookSaved.getId()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.id", is(bookSaved.getId())))
+                .andExpect(jsonPath("$.data.available", is(returned)))
+                .andReturn();
+
+        //clear the DB
+        bookRepository.deleteAll();
+    }
+
     //Utility method for setup
     private Book mockBook() {
         Book book = new Book();
