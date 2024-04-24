@@ -1,6 +1,5 @@
 package esercizi.EsercizioBiblioteca.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import esercizi.EsercizioBiblioteca.entities.enums.RecordStatusEnum;
 import jakarta.persistence.*;

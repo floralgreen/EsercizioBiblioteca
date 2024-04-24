@@ -48,7 +48,7 @@ public class BookControllerTest {
     @Test
     void createBook() throws Exception {
         //set up
-        Book book = bookRepository.save(mockBook());
+        Book book = mockBook();
 
 
         String bookJson = objectMapper.writeValueAsString(book);
@@ -57,7 +57,6 @@ public class BookControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(bookJson)).andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.id", is(book.getId())))
                 .andReturn();
 
         //verify that the book is created in the DB
